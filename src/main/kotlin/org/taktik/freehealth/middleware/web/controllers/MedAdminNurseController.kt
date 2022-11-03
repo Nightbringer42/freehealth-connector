@@ -155,7 +155,6 @@ class MedAdminNurseController(val medAdminNurseService: MedAdminNurseService, va
         @RequestHeader(name = "X-FHC-passPhrase") passPhrase: String,
         @RequestParam hcpNihii: String,
         @RequestParam hcpName: String,
-        @RequestParam fedCode: Int,
         @RequestParam(required = false) hcpQuality: String?,
         @RequestParam(required = false) hcpSsin: String?,
         @RequestParam messageNames: List<String>?) : MedAdminNurseList? {
@@ -168,7 +167,6 @@ class MedAdminNurseController(val medAdminNurseService: MedAdminNurseService, va
                 hcpNihii = hcpNihii,
                 hcpSsin = hcpSsin,
                 hcpName = hcpName,
-                fedCode = fedCode,
                 messageNames = messageNames)
             return medAdminNurseList
         }

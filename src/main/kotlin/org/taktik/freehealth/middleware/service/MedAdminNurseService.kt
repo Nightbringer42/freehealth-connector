@@ -85,7 +85,6 @@ interface MedAdminNurseService {
         hcpNihii: String,
         hcpName: String,
         hcpSsin: String?,
-        fedCode: Int,
         messageNames: List<String>?
     ): MedAdminNurseList?
 }
