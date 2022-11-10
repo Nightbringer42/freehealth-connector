@@ -10,11 +10,7 @@ package org.taktik.connector.business.medadminurses.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -38,10 +34,11 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "MedAdminRequestListType", namespace = "urn:be:cin:mycarenet:1.0:carenet:types", propOrder = {
     "singleNurseContractualCareRequestOrSinglePalliativeCareRequestOrSingleSpecificTechnicalCareRequest"
 })
+@XmlRootElement(name = "MedAdminRequestListType")
 public class MedAdminRequestListType {
 
     @XmlElements({
