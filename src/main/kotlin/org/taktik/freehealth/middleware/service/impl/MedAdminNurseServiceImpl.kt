@@ -123,19 +123,20 @@ class MedAdminNurseServiceImpl(val stsService: STSService, val keyDepotService: 
 
         businessContent.value = unEncryptedMessage
         log.info("Request is: " + businessContent.value.toString(Charsets.UTF_8))
-        val xmlByteArray = handleEncryption(encryptedKnownContent, credential, crypto, detailId)
+        val xmlByteArray = handleEncryption(encryptedKnownContent, credential, crypto, detailId) // inflate here ?
 
         val blob =
             BlobBuilderFactory.getBlobBuilder("hcpadm")
                 .build(
                     xmlByteArray,
-                    "deflate", //ADU : put deflate here to compress
+                    "none", //ADU : put deflate here to compress - MCN: none only
                     detailId,
                     "text/xml",
                     "M4A_XML",
                     "encryptedForKnownBED"
                 )
         //END TEST From eAttest
+        //blob.contentEncoding = "none" //Force to none after inflating ? => Bad idea, cannot read Xades & co MCN side
 
         val ci = CommonInput().apply {
             request = be.cin.mycarenet.esb.common.v2.RequestType().apply {
@@ -251,7 +252,9 @@ class MedAdminNurseServiceImpl(val stsService: STSService, val keyDepotService: 
             result.textContent = Base64.encodeBase64String(ConnectorXmlUtils.toByteArray(signature))
             result
         })
-        val encryptedKnowContent = builder.sign(credential, content.toByteArray(charset("UTF-8")), options)
+        val encryptedKnowContent = builder.sign(credential,
+            content.toByteArray(charset("UTF-8")),
+            options)
         return crypto.seal(
             Crypto.SigningPolicySelector.WITH_NON_REPUDIATION,
             KeyDepotManagerImpl.getInstance(keyDepotService).getEtkSet(
@@ -261,7 +264,7 @@ class MedAdminNurseServiceImpl(val stsService: STSService, val keyDepotService: 
                 null,
                 false
             ),
-            encryptedKnowContent
+            ConnectorIOUtils.compress(encryptedKnowContent, "deflate") //Compress here ? No direct repudation, so maybe working ?
         )
     }
 
