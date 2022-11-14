@@ -156,8 +156,7 @@ class MedAdminNurseController(val medAdminNurseService: MedAdminNurseService, va
         @RequestParam hcpNihii: String,
         @RequestParam hcpName: String,
         @RequestParam(required = false) hcpQuality: String?,
-        @RequestParam(required = false) hcpSsin: String?,
-        @RequestParam messageNames: List<String>?) : MedAdminNurseList? {
+        @RequestParam(required = false) hcpSsin: String?) : MedAdminNurseList? {
 
             val medAdminNurseList =  medAdminNurseService.getMedAdminMessages(
                 keystoreId = keystoreId,
@@ -166,54 +165,53 @@ class MedAdminNurseController(val medAdminNurseService: MedAdminNurseService, va
                 hcpQuality = hcpQuality ?: "nurse",
                 hcpNihii = hcpNihii,
                 hcpSsin = hcpSsin,
-                hcpName = hcpName,
-                messageNames = messageNames)
+                hcpName = hcpName)
             return medAdminNurseList
         }
 
-//    @PostMapping("/async/confirm/messages", produces = [MediaType.APPLICATION_JSON_UTF8_VALUE])
-//    fun confirmMemberDataMessagesAsync(
-//        @RequestHeader(name = "X-FHC-tokenId") tokenId: UUID,
-//        @RequestHeader(name = "X-FHC-keystoreId") keystoreId: UUID,
-//        @RequestHeader(name = "X-FHC-passPhrase") passPhrase: String,
-//        @RequestParam hcpNihii: String,
-//        @RequestParam hcpName: String,
-//        @RequestParam(required = false) hcpQuality: String?,
-//        @RequestParam(required = false) hcpSsin: String?,
-//        @RequestBody mdaMessagesReference: List<String>) : Boolean?{
-//        return medAdminNurseService.confirmMemberDataMessages(
-//            keystoreId = keystoreId,
-//            tokenId = tokenId,
-//            passPhrase = passPhrase,
-//            hcpQuality = hcpQuality,
-//            hcpNihii = hcpNihii,
-//            hcpName = hcpName,
-//            hcpSsin = hcpSsin,
-//            mdaMessagesReference = mdaMessagesReference
-//        )
-//        }
-//
-//
-//    @PostMapping("/async/confirm/acks", produces = [MediaType.APPLICATION_JSON_UTF8_VALUE])
-//    fun confirmMemberDataAcksAsync(
-//        @RequestHeader(name = "X-FHC-tokenId") tokenId: UUID,
-//        @RequestHeader(name = "X-FHC-keystoreId") keystoreId: UUID,
-//        @RequestHeader(name = "X-FHC-passPhrase") passPhrase: String,
-//        @RequestParam hcpNihii: String,
-//        @RequestParam hcpName: String,
-//        @RequestParam(required = false) hcpQuality: String?,
-//        @RequestParam(required = false) hcpSsin: String?,
-//        @RequestBody mdaAcksHashes: List<String>): Boolean?{
-//        return medAdminNurseService.confirmMemberDataAcks(
-//            keystoreId = keystoreId,
-//            tokenId = tokenId,
-//            passPhrase = passPhrase,
-//            hcpQuality = hcpQuality,
-//            hcpNihii = hcpNihii,
-//            hcpName = hcpName,
-//            hcpSsin = hcpSsin,
-//            mdaAcksHashes = mdaAcksHashes
-//        )
-//    }
+    @PostMapping("/async/confirm/messages", produces = [MediaType.APPLICATION_JSON_UTF8_VALUE])
+    fun confirmMedAdminMessagesAsync(
+        @RequestHeader(name = "X-FHC-tokenId") tokenId: UUID,
+        @RequestHeader(name = "X-FHC-keystoreId") keystoreId: UUID,
+        @RequestHeader(name = "X-FHC-passPhrase") passPhrase: String,
+        @RequestParam hcpNihii: String,
+        @RequestParam hcpName: String,
+        @RequestParam(required = false) hcpQuality: String?,
+        @RequestParam(required = false) hcpSsin: String?,
+        @RequestBody medAdminMessagesReference: List<String>) : Boolean?{
+        return medAdminNurseService.confirmMedAdminMessages(
+            keystoreId = keystoreId,
+            tokenId = tokenId,
+            passPhrase = passPhrase,
+            hcpQuality = hcpQuality,
+            hcpNihii = hcpNihii,
+            hcpName = hcpName,
+            hcpSsin = hcpSsin,
+            medAdminMessagesReference = medAdminMessagesReference
+        )
+        }
+
+
+    @PostMapping("/async/confirm/acks", produces = [MediaType.APPLICATION_JSON_UTF8_VALUE])
+    fun confirmMedAdminAcksAsync(
+        @RequestHeader(name = "X-FHC-tokenId") tokenId: UUID,
+        @RequestHeader(name = "X-FHC-keystoreId") keystoreId: UUID,
+        @RequestHeader(name = "X-FHC-passPhrase") passPhrase: String,
+        @RequestParam hcpNihii: String,
+        @RequestParam hcpName: String,
+        @RequestParam(required = false) hcpQuality: String?,
+        @RequestParam(required = false) hcpSsin: String?,
+        @RequestBody mdaAcksHashes: List<String>): Boolean?{
+        return medAdminNurseService.confirmMedAdminAcks(
+            keystoreId = keystoreId,
+            tokenId = tokenId,
+            passPhrase = passPhrase,
+            hcpQuality = hcpQuality,
+            hcpNihii = hcpNihii,
+            hcpName = hcpName,
+            hcpSsin = hcpSsin,
+            mdaAcksHashes = mdaAcksHashes
+        )
+    }
 
 }

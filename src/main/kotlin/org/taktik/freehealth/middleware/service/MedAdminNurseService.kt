@@ -22,13 +22,7 @@ package org.taktik.freehealth.middleware.service
 
 import org.taktik.connector.business.domain.common.GenAsyncResponse
 import org.taktik.connector.business.medadminurses.domain.MedAdminRequestListType
-import org.taktik.connector.business.medadminurses.domain.MedAdminResponseListType
 import org.taktik.freehealth.middleware.domain.hcpadm.MedAdminNurseList
-import org.taktik.freehealth.middleware.domain.memberdata.MemberDataBatchRequest
-import org.taktik.freehealth.middleware.domain.memberdata.MemberDataList
-import org.taktik.freehealth.middleware.domain.memberdata.MemberDataResponse
-import org.taktik.icure.cin.saml.extensions.Facet
-import java.time.Instant
 import java.util.UUID
 
 interface MedAdminNurseService {
@@ -45,38 +39,7 @@ interface MedAdminNurseService {
         requestList: MedAdminRequestListType
                              ): GenAsyncResponse
 
-//    fun getMemberDataMessages(
-//        keystoreId: UUID,
-//        tokenId: UUID,
-//        passPhrase: String,
-//        hcpQuality: String?,
-//        hcpNihii: String,
-//        hcpName: String,
-//        hcpSsin: String?,
-//        messageNames: List<String>?
-//    ): MemberDataList?
-//
-//    fun confirmMemberDataMessages(
-//        keystoreId: UUID,
-//        tokenId: UUID,
-//        passPhrase: String,
-//        hcpQuality: String?,
-//        hcpNihii: String,
-//        hcpName: String,
-//        hcpSsin: String?,
-//        mdaMessagesReference: List<String>
-//    ): Boolean
-//
-//    fun confirmMemberDataAcks(
-//        keystoreId: UUID,
-//        tokenId: UUID,
-//        passPhrase: String,
-//        hcpQuality: String?,
-//        hcpNihii: String,
-//        hcpName: String,
-//        hcpSsin: String?,
-//        mdaAcksHashes: List<String>
-//    ): Boolean
+
     fun getMedAdminMessages(
         keystoreId: UUID,
         tokenId: UUID,
@@ -84,7 +47,28 @@ interface MedAdminNurseService {
         hcpQuality: String,
         hcpNihii: String,
         hcpName: String,
-        hcpSsin: String?,
-        messageNames: List<String>?
+        hcpSsin: String?
     ): MedAdminNurseList?
+
+    fun confirmMedAdminMessages(
+        keystoreId: UUID,
+        tokenId: UUID,
+        passPhrase: String,
+        hcpQuality: String?,
+        hcpNihii: String,
+        hcpName: String,
+        hcpSsin: String?,
+        medAdminMessagesReference: List<String>
+    ): Boolean
+
+    fun confirmMedAdminAcks(
+        keystoreId: UUID,
+        tokenId: UUID,
+        passPhrase: String,
+        hcpQuality: String?,
+        hcpNihii: String,
+        hcpName: String,
+        hcpSsin: String?,
+        mdaAcksHashes: List<String>
+    ): Boolean
 }
