@@ -51,12 +51,17 @@ import org.taktik.freehealth.middleware.service.MedAdminNurseService
 import org.taktik.freehealth.middleware.service.STSService
 import org.taktik.icure.cin.saml.extensions.ResponseList
 import org.w3c.dom.Document
+import org.w3c.dom.Node
 import org.w3c.dom.NodeList
+import java.io.ByteArrayOutputStream
 import java.io.StringWriter
 import java.net.URI
 import java.net.URISyntaxException
 import java.util.*
 import javax.xml.bind.JAXBContext
+import javax.xml.transform.OutputKeys
+import javax.xml.transform.Result
+import javax.xml.transform.Source
 import javax.xml.transform.TransformerException
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMResult
@@ -70,6 +75,8 @@ class MedAdminNurseServiceImpl(val stsService: STSService, val keyDepotService: 
     @Value("\${mycarenet.timezone}")
     internal val mcnTimezone: String = "Europe/Brussels"
     private val genAsyncService = GenAsyncServiceImpl("hcpadm")
+
+    private val trfactory = TransformerFactory.newInstance()
 
     private val log = LoggerFactory.getLogger(this.javaClass)
     private val config = ConfigFactory.getConfigValidator(listOf())
@@ -173,6 +180,7 @@ class MedAdminNurseServiceImpl(val stsService: STSService, val keyDepotService: 
                         .toString(Charsets.UTF_8)
                 postResponse?.soapResponse?.writeTo(this.soapResponseOutputStream())
                 postResponse?.soapRequest?.writeTo(this.soapRequestOutputStream())
+                this.decryptedResponseContent = arrayListOf(String(encryptedKnownContent.businessContent.value))
             }
         }
     }
@@ -249,12 +257,15 @@ class MedAdminNurseServiceImpl(val stsService: STSService, val keyDepotService: 
         options.put("encapsulate", true)
         options.put("encapsulate-transformer", EncapsulationTransformer { signature ->
             val result = signature.ownerDocument.createElementNS("urn:be:cin:encrypted", "Xades")
-            result.textContent = Base64.encodeBase64String(ConnectorXmlUtils.toByteArray(signature))
+            result.textContent = Base64.encodeBase64String(toByteArray(signature))
             result
         })
         val encryptedKnowContent = builder.sign(credential,
             content.toByteArray(charset("UTF-8")),
             options)
+
+        //Reste un problème à la lecture du message côté OA / MCN : invalid utf-8 middle byte 0x48
+
         return crypto.seal(
             Crypto.SigningPolicySelector.WITH_NON_REPUDIATION,
             KeyDepotManagerImpl.getInstance(keyDepotService).getEtkSet(
@@ -264,8 +275,29 @@ class MedAdminNurseServiceImpl(val stsService: STSService, val keyDepotService: 
                 null,
                 false
             ),
-            ConnectorIOUtils.compress(encryptedKnowContent, "deflate") //Compress here ? No direct repudation, so maybe working ?
+            ConnectorIOUtils.compress(encryptedKnowContent, "deflate") //Compress here ? No direct repudiation, so maybe working ?
         )
+    }
+
+    fun toByteArray(node: Node?): ByteArray? {
+        var out: ByteArrayOutputStream? = null
+        try {
+            val source: Source = DOMSource(node)
+            out = ByteArrayOutputStream()
+            val result: Result = StreamResult(out)
+            val transformer = trfactory.newTransformer()
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8")
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes")
+            transformer.setOutputProperty(OutputKeys.INDENT, "no")
+            out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>".toByteArray(Charsets.UTF_8))
+            transformer.transform(source, result)
+            return out.toByteArray()
+        } catch (var11: TransformerException) {
+            log.error(var11.javaClass.simpleName + ":" + var11.message)
+        } finally {
+            ConnectorIOUtils.closeQuietly(out)
+        }
+        return ByteArray(0)
     }
 
     @Throws(TransformerException::class)
