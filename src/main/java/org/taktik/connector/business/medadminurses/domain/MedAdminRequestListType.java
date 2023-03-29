@@ -34,18 +34,30 @@ import javax.xml.bind.annotation.*;
  * 
  * 
  */
-@XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name = "MedAdminRequestListType", namespace = "urn:be:cin:mycarenet:1.0:carenet:types", propOrder = {
-    "singleNurseContractualCareRequestOrSinglePalliativeCareRequestOrSingleSpecificTechnicalCareRequest"
-})
-@XmlRootElement(name = "MedAdminRequestListType")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(
+        name = "MedAdminRequestListType",
+        propOrder = {"singleNurseContractualCareRequestOrSinglePalliativeCareRequestOrSingleSpecificTechnicalCareRequest"}
+)
+@XmlRootElement(
+        name = "MedAdminRequestList",
+        namespace = "urn:be:cin:mycarenet:1.0:carenet:types" // Déclaration dans le root Element nécessaire à la validation XSD
+)
 public class MedAdminRequestListType {
-
-    @XmlElements({
-        @XmlElement(name = "SingleNurseContractualCareRequest", namespace = "urn:be:cin:mycarenet:1.0:carenet:types", type = SingleNurseContractualCareRequestType.class),
-        @XmlElement(name = "SinglePalliativeCareRequest", namespace = "urn:be:cin:mycarenet:1.0:carenet:types", type = SinglePalliativeCareRequestType.class),
-        @XmlElement(name = "SingleSpecificTechnicalCareRequest", namespace = "urn:be:cin:mycarenet:1.0:carenet:types", type = SingleSpecificTechnicalCareRequestType.class)
-    })
+    
+    @XmlElements({@XmlElement(
+            name = "SingleNurseContractualCareRequest",
+            namespace = "urn:be:cin:mycarenet:1.0:carenet:types", // Same as previous
+            type = SingleNurseContractualCareRequestType.class
+    ), @XmlElement(
+            name = "SinglePalliativeCareRequest",
+            namespace = "urn:be:cin:mycarenet:1.0:carenet:types",
+            type = SinglePalliativeCareRequestType.class
+    ), @XmlElement(
+            name = "SingleSpecificTechnicalCareRequest",
+            namespace = "urn:be:cin:mycarenet:1.0:carenet:types",
+            type = SingleSpecificTechnicalCareRequestType.class
+    )})
     protected List<Object> singleNurseContractualCareRequestOrSinglePalliativeCareRequestOrSingleSpecificTechnicalCareRequest;
 
     /**

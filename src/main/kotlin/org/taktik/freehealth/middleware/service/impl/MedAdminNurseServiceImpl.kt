@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service
 import org.taktik.connector.business.domain.common.GenAsyncResponse
 import org.taktik.connector.business.genericasync.builders.BuilderFactory
 import org.taktik.connector.business.genericasync.service.impl.GenAsyncServiceImpl
+import org.taktik.connector.business.medadminurses.MedAdminNurseXmlValidatorImpl
 import org.taktik.connector.business.medadminurses.domain.MedAdminRequestListType
 import org.taktik.connector.business.mycarenetcommons.mapper.SendRequestMapper
 import org.taktik.connector.business.mycarenetdomaincommons.builders.BlobBuilderFactory
@@ -121,6 +122,11 @@ class MedAdminNurseServiceImpl(val stsService: STSService, val keyDepotService: 
         val unEncryptedMessage = ConnectorXmlUtils.toByteArray(requestList)
 
         val detailId = "_" + IdGeneratorFactory.getIdGenerator("uuid").generateId()
+
+//        for(element in requestList.singleNurseContractualCareRequestOrSinglePalliativeCareRequestOrSingleSpecificTechnicalCareRequest)
+//            MedAdminNurseXmlValidatorImpl().validate(element)
+            MedAdminNurseXmlValidatorImpl().validate(requestList)
+
 
         //TEST From eAttest
         val encryptedKnownContent = EncryptedKnownContent()
@@ -265,6 +271,7 @@ class MedAdminNurseServiceImpl(val stsService: STSService, val keyDepotService: 
             options)
 
         //Reste un problème à la lecture du message côté OA / MCN : invalid utf-8 middle byte 0x48
+        //Nouvelle erreur : invalid utf-8 start byte 0xb6
 
         return crypto.seal(
             Crypto.SigningPolicySelector.WITH_NON_REPUDIATION,

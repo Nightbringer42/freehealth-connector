@@ -33,11 +33,14 @@ import javax.xml.bind.annotation.*;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "SingleNurseContractualCareRequestType", namespace = "urn:be:cin:mycarenet:1.0:carenet:types", propOrder = {
+@XmlType(name = "SingleNurseContractualCareRequest", namespace = "urn:be:cin:mycarenet:1.0:carenet:types", propOrder = {
     "careReceiverId",
     "nurseContractualCareRequestDetail"
 })
-@XmlRootElement(name = "SingleNurseContractualCareRequestType")
+@XmlRootElement(
+        name = "SingleNurseContractualCareRequest",
+        namespace = "urn:be:cin:mycarenet:1.0:carenet:types"
+)
 public class SingleNurseContractualCareRequestType {
 
     @XmlElement(name = "CareReceiverId", namespace = "urn:be:cin:mycarenet:1.0:carenet:types", required = true)

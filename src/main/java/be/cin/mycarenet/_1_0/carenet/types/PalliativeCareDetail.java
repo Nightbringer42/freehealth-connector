@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.Serializable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -32,16 +33,10 @@ public class PalliativeCareDetail implements Serializable {
       required = true
    )
    protected String requester;
-   @XmlElement(
-      name = "PeriodStart",
-      required = true,
-      type = String.class
-   )
-   @XmlJavaTypeAdapter(XmlDateNoTzAdapter.class)
-   @XmlSchemaType(
-      name = "date"
-   )
-   protected DateTime periodStart;
+   
+   @XmlElement(name = "PeriodStart", namespace = "urn:be:cin:mycarenet:1.0:carenet:types", required = true)
+   @XmlSchemaType(name = "date")
+   protected XMLGregorianCalendar periodStart;
    @XmlElement(
       name = "Group",
       required = true
@@ -74,11 +69,11 @@ public class PalliativeCareDetail implements Serializable {
       this.requester = value;
    }
 
-   public DateTime getPeriodStart() {
+   public XMLGregorianCalendar getPeriodStart() {
       return this.periodStart;
    }
 
-   public void setPeriodStart(DateTime value) {
+   public void setPeriodStart(XMLGregorianCalendar value) {
       this.periodStart = value;
    }
 
