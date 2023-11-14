@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
@@ -122,6 +123,8 @@ public class NurseContractualCareUpdateDetailType {
      *     
      */
     public XMLGregorianCalendar getVisitDate() {
+        if(visitDate != null)
+            visitDate.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
         return visitDate;
     }
 

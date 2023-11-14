@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
@@ -152,6 +153,8 @@ public class CareReceiverDetailType {
      *     
      */
     public XMLGregorianCalendar getBirthday() {
+        if(birthday != null)
+            birthday.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
         return birthday;
     }
 
@@ -176,6 +179,8 @@ public class CareReceiverDetailType {
      *     
      */
     public XMLGregorianCalendar getDeceased() {
+        if(deceased != null)
+            deceased.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
         return deceased;
     }
 
